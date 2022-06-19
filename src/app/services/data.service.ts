@@ -7,13 +7,24 @@ export class DataService {
   currentUser:any
   //DATABASE
   db: any = {
-    1000: { "acno": 1000, "username": "Neer", "password": 1000, "balance": 5000 },
-    1001: { "acno": 1001, "username": "Laisha", "password": 1001, "balance": 6000 },
-    1002: { "acno": 1002, "username": "Vypm", "password": 1002, "balance": 7000 }
+    1000: { "acno": 1000, "username": "Neer", "password": 1000, "balance": 5000 ,transaction:[]},
+    1001: { "acno": 1001, "username": "Laisha", "password": 1001, "balance": 6000,transaction:[] },
+    1002: { "acno": 1002, "username": "Vypm", "password": 1002, "balance": 7000,transaction:[] }
 
   }
-  constructor() { }
+  constructor() {
+    //this.getDetails()
+   }
+//get details from local storage
+getDetails(){
+  if(localStorage.getItem("database")){
+    this.db=JSON.parse(localStorage.getItem("database")||'')
+  }
+  if(localStorage.getItem("currentUser")){
+    this.currentUser=JSON.parse(localStorage.getItem("currentUser")||'')
+  }
 
+}
 //save details()
 saveDetails(){
   if(this.db){
@@ -57,7 +68,8 @@ saveDetails(){
        db[acno]={
         acno, 
         username, 
-        password, "balance": 0
+        password, "balance": 0,
+        transaction:[]
        }
        this.saveDetails()
        return true
@@ -73,6 +85,10 @@ saveDetails(){
      if(acno in db){
        if(password==db[acno]["password"]){
            db[acno]["balance"]+=amount
+           db[acno].transaction.push({
+             type:"CREDIT",
+             amount:amount
+           })
            this.saveDetails()
             return db[acno]["balance"]
        }
@@ -98,6 +114,10 @@ saveDetails(){
 
         if(db[acno]["balance"]>amount){
           db[acno]["balance"]-=amount
+          db[acno].transaction.push({
+            type:"DEBIT",
+            amount:amount
+          })
           this.saveDetails()
           return db[acno]["balance"]
         }
