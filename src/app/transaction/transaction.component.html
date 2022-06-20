@@ -10,19 +10,16 @@
   <table style="color:white">
       <thead>
           <tr>
-              <th>TYPE</th>&nbsp;
+              <th>TYPE</th>
               <th>Amount</th>
           </tr>
       </thead>
       <tbody>
-        <tr>
-            <th>Credit</th>&nbsp;
-            <th>1000</th>
+        <tr *ngFor="let transaction of transactions">
+            <th>{{transaction.type}}</th>
+            <th>{{transaction.amount}}</th>
         </tr>
-        <tr>
-            <th>Debit</th>&nbsp;
-            <th>1000</th>
-        </tr>
+       
       </tbody>
   </table>
   <a routerLink="/dashboard" style=" font-size:20px;margin-left:750px;margin-right: auto;">Home</a>
